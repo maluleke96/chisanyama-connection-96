@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0f0f0f;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+.back {
+    background: #333;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.card {
+    background: #1c1c1c;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.qty-box {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.qty-box button {
+    background: #e6b800;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button.pay {
+    width: 100%;
+    padding: 12px;
+    background: #e6b800;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#cashSection { display:none; }
+
+.success {
+    display:none;
+    text-align:center;
+    padding:40px;
+}
+
+.success h1 {
+    color:#e6b800;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="mainBox">
+
+<div class="back" onclick="goHome()">⬅ Back</div>
+
+<h2>Checkout</h2>
+
+<div id="cart"></div>
+
+<h3 id="summary"></h3>
+
+<input type="text" id="name" placeholder="Your Name">
+<input type="text" id="location" placeholder="Delivery Location">
+
+<select id="payment" onchange="paymentMethod()">
+    <option value="">Select Payment</option>
+    <option value="card">Card</option>
+    <option value="cash">Cash</option>
+</select>
+
+<div id="cashSection">
+    <input type="number" id="cash" placeholder="Cash Given">
+    <p id="change"></p>
+</div>
+
+<button class="pay" onclick="payNow()">Place Order</button>
+
+</div>
+
+<!-- SUCCESS -->
+<div class="success" id="success">
+    <h1>🎉 Order Placed!</h1>
+    <p>Your order has been received successfully.</p>
+    <p>We will confirm your order shortly on your WhatsApp inbox.</p>
+    <button onclick="goHome()">⬅ Back to Menu</button>
+</div>
+
+<script>
+
+let order = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* ================= TOTAL ================= */
+function getTotals() {
+    let subtotal = 0;
+
+    order.forEach(i => {
+        subtotal += i.price * i.qty;
+    });
+
+    let deliveryFee = (subtotal > 0 && subtotal < 50) ? 5 : 0;
+
+    let finalTotal = subtotal + deliveryFee;
+
+    return { subtotal, deliveryFee, finalTotal };
+}
+
+/* ================= RENDER ================= */
+function renderCart() {
+
+    let cartDiv = document.getElementById("cart");
+    cartDiv.innerHTML = "";
+
+    let { subtotal, deliveryFee, finalTotal } = getTotals();
+
+    order.forEach((item, index) => {
+
+        let div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+            <b>${item.name}</b><br>
+            🔥 Sauce: ${item.sauce}<br>
+            🍽️ Pap: ${item.pap}<br>
+            R${item.price} x ${item.qty} = R${item.price * item.qty}
+
+            <div class="qty-box">
+                <button onclick="increase(${index})">+</button>
+                <button onclick="decrease(${index})">-</button>
+                <button onclick="removeItem(${index})">Remove</button>
+            </div>
+        `;
+
+        cartDiv.appendChild(div);
+    });
+
+    document.getElementById("summary").innerHTML =
+        `Subtotal: R${subtotal}<br>
+         Delivery: R${deliveryFee}<br>
+         <b>Total: R${finalTotal}</b>`;
+}
+
+/* ================= QTY ================= */
+function increase(i) {
+    order[i].qty++;
+    saveCart();
+    renderCart();
+}
+
+function decrease(i) {
+    order[i].qty--;
+
+    if (order[i].qty <= 0) {
+        order.splice(i,1);
+    }
+
+    saveCart();
+    renderCart();
+}
+
+function removeItem(i) {
+    order.splice(i,1);
+    saveCart();
+    renderCart();
+}
+
+/* ================= SAVE ================= */
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(order));
+}
+
+/* ================= BACK ================= */
+function goHome() {
+    window.location.href = "index.html";
+}
+
+/* ================= PAYMENT ================= */
+function paymentMethod() {
+    let method = document.getElementById("payment").value;
+
+    document.getElementById("cashSection").style.display =
+        method === "cash" ? "block" : "none";
+}
+
+/* ================= CHANGE ================= */
+document.getElementById("cash").addEventListener("input", function () {
+
+    let cash = parseFloat(this.value) || 0;
+    let { finalTotal } = getTotals();
+
+    let change = cash - finalTotal;
+
+    document.getElementById("change").innerText =
+        change >= 0 ? "Change: R" + change : "Not enough cash";
+});
+
+/* ================= PAY ================= */
+function payNow() {
+
+    let name = document.getElementById("name").value;
+    let location = document.getElementById("location").value;
+    let payment = document.getElementById("payment").value;
+    let cash = parseFloat(document.getElementById("cash").value) || 0;
+
+    if (!name || !location || !payment) {
+        alert("Fill all details");
+        return;
+    }
+
+    if (order.length === 0) {
+        alert("Cart is empty");
+        return;
+    }
+
+    let { subtotal, deliveryFee, finalTotal } = getTotals();
+
+    if (payment === "cash" && cash < finalTotal) {
+        alert("Cash is not enough");
+        return;
+    }
+
+    let itemsText = order.map(i =>
+`${i.name} x${i.qty} = R${i.price * i.qty}
+Sauce: ${i.sauce}
+Pap: ${i.pap}`).join("\n\n");
+
+    let message = `CHISANYAMA ORDER
+
+Name: ${name}
+Location: ${location}
+
+Items:
+${itemsText}
+
+Subtotal: R${subtotal}
+Delivery: R${deliveryFee}
+Total: R${finalTotal}
+Payment: ${payment}
+Cash: ${payment === "cash" ? cash : "N/A"}`;
+
+    let phone = "27820630193";
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+
+    document.getElementById("mainBox").style.display = "none";
+    document.getElementById("success").style.display = "block";
+
+    localStorage.removeItem("cart");
+}
+
+/* INIT */
+renderCart();
+
+</script>
+
+</body>
+</html>

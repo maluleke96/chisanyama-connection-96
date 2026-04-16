@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chisanyama Connection</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="top-bar">
+
+        <img src="imgaes/log/WhatsApp Image 2024-09-19 at 13.50.26_ff0b252d.jpg" class="logo">
+
+        <div class="job-link" onclick="window.location.href='job.html'">
+            💼 Jobs
+        </div>
+
+      
+
+        <div class="business-info">
+            <h1>Chisanyama Connection</h1>
+            <p>📞 082 063 0193</p>
+            <p>📍 Nzhelele opposite Top T Tile</p>
+        </div>
+
+        <div class="cart" id="cartBtn">
+            🛒 R<span id="cartTotal">0</span> (<span id="cartCount">0</span>)
+        </div>
+
+    </div>
+</header>
+
+<section class="notice">
+🔥 Free delivery for orders above R50
+</section>
+
+<div class="container">
+
+    <!-- CATEGORY WRAPPER -->
+    <div class="categories-wrapper">
+
+
+        <div id="statusBanner"></div>
+
+        
+
+        <button class="scroll-btn left" onclick="scrollCategories(-200)">◀</button>
+
+        <div class="categories" id="categoriesScroll">
+
+            <div class="category" data-category="chicken dust menu">
+                <img src="imgaes/CHICKEN DUST.jpg">
+                <p>Chicken</p>
+            </div>
+
+            <div class="category" data-category="wors">
+                <img src="imgaes/wors.jpg">
+                <p>WORS</p>
+            </div>
+
+            <div class="category" data-category="fish">
+                <img src="imgaes/fish/WhatsApp Image 2026-01-24 at 6.56.40 PM.jpeg">
+                <p>FISH</p>
+            </div>
+
+            <div class="category" data-category="steak">
+                <img src="imgaes/steak/IMG_9865.JPG">
+                <p>STEAK</p>
+            </div>
+
+            <div class="category" data-category="mambo">
+                <img src="imgaes/mambo fish/IMG_9885.JPG">
+                <p>MAMBO FISH</p>
+            </div>
+
+            <div class="category" data-category="fried">
+                <img src="imgaes/fried chicken/IMG_9723.JPG">
+                <p>FRIED CHICKEN</p>
+            </div>
+
+             <div class="category" data-category="rice">
+                <img src="imgaes/yellow rice.jpeg">
+                <p>SPECIAL RICE</p>
+            </div>
+
+            <div class="category" data-category="stews">
+                <img src="imgaes/Beef-Stew-Recipe-SQ.jpg">
+                <p>STEWS</p>
+            </div>
+
+            <div class="category" data-category="special">
+                <img src="imgaes/specail meal/IMG_9803.JPG">
+                <p>SPECIALS MEAL</p>
+            </div>
+
+            <div class="category" data-category="chips">
+                <img src="imgaes/chips.webp">
+                <p>CHIPS</p>
+            </div>
+
+            <div class="category" data-category="kota">
+                <img src="imgaes/kota/IMG_9836.JPG">
+                <p>KOTAS</p>
+            </div>
+
+            <div class="category" data-category="drinks">
+                <img src="imgaes/drinks.webp">
+                <p>DRINKS</p>
+            </div>
+
+            <div class="category" data-category="sides">
+                <img src="imgaes/mambo fish/IMG_9885.JPG">
+                <p>SIDES</p>
+            </div>
+
+        </div>
+
+        <button class="scroll-btn right" onclick="scrollCategories(200)">▶</button>
+
+    </div>
+
+    <!-- MENU -->
+    <div class="menu" id="menuItems"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

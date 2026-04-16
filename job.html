@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0f0f0f;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #e6b800;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.back {
+    background: #333;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.success {
+    display:none;
+    text-align:center;
+    padding:40px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="form">
+
+<div class="back" onclick="window.location.href='index.html'">⬅ Back</div>
+
+<h2>Job Application</h2>
+
+<input id="name" placeholder="Full Name">
+<input id="phone" placeholder="Phone Number">
+
+<select id="position">
+    <option value="">Select Position</option>
+    <option value="Cashier">Cashier</option>
+    <option value="Kitchen Staff">Kitchen Staff</option>
+    <option value="Driver">Driver</option>
+    <option value="Cleaner">Cleaner</option>
+</select>
+
+<textarea id="experience" placeholder="Experience (optional)"></textarea>
+
+<button onclick="apply()">Submit</button>
+
+</div>
+
+<div class="success" id="success">
+    <h1>✔ Application Sent</h1>
+    <p>We will contact you soon via WhatsApp inbox.</p>
+    <button onclick="window.location.href='index.html'">Go Home</button>
+</div>
+
+<script>
+function apply() {
+
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let position = document.getElementById("position").value;
+    let exp = document.getElementById("experience").value;
+
+    if (!name || !phone || !position) {
+        alert("Fill all required fields");
+        return;
+    }
+
+    let msg = `🧑‍💼 JOB APPLICATION
+
+Name: ${name}
+Phone: ${phone}
+Position: ${position}
+Experience: ${exp}
+
+We will contact you soon.`;
+
+    window.open(`https://wa.me/27611084911?text=${encodeURIComponent(msg)}`, "_blank");
+
+    document.getElementById("form").style.display = "none";
+    document.getElementById("success").style.display = "block";
+}
+</script>
+
+</body>
+</html>
